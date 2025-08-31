@@ -121,30 +121,20 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Create ECS task definition JSON
-  run: |
-    cat > task-definition.json <<EOF
-    {
-      "family": "ecs-app-task",
-      "networkMode": "awsvpc",
-      "executionRoleArn": "arn:aws:iam::024193401724:role/ecsTaskExecutionRole",
-      "requiresCompatibilities": ["FARGATE"],
-      "cpu": "256",
-      "memory": "512",
-      "containerDefinitions": [
-        {
-          "name": "ecs-app",
-          "image": "024193401724.dkr.ecr.us-east-1.amazonaws.com/django-app:production",
-          "memory": 512,
-          "cpu": 256,
-          "essential": true,
-          "portMappings": [
-            {
-              "containerPort": 8000,
-              "hostPort": 8000,
-              "protocol": "tcp"
-            }
-          ],
-          "logConfiguration": {
+        run: |
+          cat > task-definition.json <<EOF
+          {
+            "family": "ecs-app-task",
+            "networkMode": "awsvpc",
+            "executionRoleArn": "arn:aws:iam::024193401724:role/ecsTaskExecutionRole",
+            "containerDefinitions": [
+              {
+                "name": "ecs-app",
+                "image": "024193401724.dkr.ecr.us-east-1.amazonaws.com/django-app:production",
+                "memory": 512,
+                "cpu": 256,
+                "essential": true,
+                 "logConfiguration": {
             "logDriver": "awslogs",
             "options": {
               "awslogs-group": "/ecs/ecs-app",
@@ -152,11 +142,28 @@ jobs:
               "awslogs-stream-prefix": "ecs"
             }
           }
-        }
-      ]
-    }
-    EOF
-
+                "portMappings": [
+                  {
+                    "containerPort": 8000,
+                    "hostPort": 8000,
+                    "protocol": "tcp"
+                  }
+                ],
+                "logConfiguration": {
+            "logDriver": "awslogs",
+            "options": {
+              "awslogs-group": "/ecs/ecs-app",
+              "awslogs-region": "us-east-1",
+              "awslogs-stream-prefix": "ecs"
+            }
+          }
+              }
+            ],
+            "requiresCompatibilities": ["FARGATE"],
+            "cpu": "256",
+            "memory": "512"
+          }
+          EOF
     
 
       - name: Deploy Amazon ECS task definition
