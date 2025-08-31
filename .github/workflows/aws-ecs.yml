@@ -126,7 +126,7 @@ jobs:
           {
             "family": "ecs-app-task",
             "networkMode": "awsvpc",
-            "executionRoleArn": "${{ secrets.ECS_EXECUTION_ROLE }}",
+            "executionRoleArn": "arn:aws:iam::024193401724:role/ecsTaskExecutionRole",
             "containerDefinitions": [
               {
                 "name": "ecs-app",
