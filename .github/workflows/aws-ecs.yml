@@ -134,6 +134,13 @@ jobs:
                 "memory": 512,
                 "cpu": 256,
                 "essential": true,
+                "portMappings": [
+                  {
+                    "containerPort": 8000,
+                    "hostPort": 8000,
+                    "protocol": "tcp"
+                  }
+                ],
                  "logConfiguration": {
             "logDriver": "awslogs",
             "options": {
@@ -142,13 +149,6 @@ jobs:
               "awslogs-stream-prefix": "ecs"
             }
           }
-                "portMappings": [
-                  {
-                    "containerPort": 8000,
-                    "hostPort": 8000,
-                    "protocol": "tcp"
-                  }
-                ]
               }
             ],
             "requiresCompatibilities": ["FARGATE"],
