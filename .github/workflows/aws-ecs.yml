@@ -129,7 +129,7 @@ jobs:
             "executionRoleArn": "${{ secrets.ECS_EXECUTION_ROLE }}",
             "containerDefinitions": [
               {
-                "name": "django-app",
+                "name": "ecs-app",
                 "image": "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/django-app:production",
                 "memory": 512,
                 "cpu": 256,
