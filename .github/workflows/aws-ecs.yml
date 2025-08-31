@@ -120,6 +120,36 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Create ECS task definition JSON
+        run: |
+          cat > task-definition.json <<EOF
+          {
+            "family": "ecs-app-task",
+            "networkMode": "awsvpc",
+            "executionRoleArn": "${{ secrets.ECS_EXECUTION_ROLE }}",
+            "containerDefinitions": [
+              {
+                "name": "django-app",
+                "image": "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/django-app:production",
+                "memory": 512,
+                "cpu": 256,
+                "essential": true,
+                "portMappings": [
+                  {
+                    "containerPort": 8000,
+                    "hostPort": 8000,
+                    "protocol": "tcp"
+                  }
+                ]
+              }
+            ],
+            "requiresCompatibilities": ["FARGATE"],
+            "cpu": "256",
+            "memory": "512"
+          }
+          EOF
+    
+
       - name: Deploy Amazon ECS task definition
         id: deploy
         run: |
